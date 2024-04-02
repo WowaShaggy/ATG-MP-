@@ -2,8 +2,9 @@ package tests;
 
 import core.Configuration;
 import org.testng.annotations.Test;
+import tests.ui.TestNGBaseTest;
 
-public class ConfigurationTest {
+public class ConfigurationTest extends TestNGBaseTest {
     @Test
     public void testExample() {
         String url = Configuration.getProperty("url");

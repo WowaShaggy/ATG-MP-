@@ -1,8 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="MyTestSuite">
+<suite name="MyTestSuite" thread-count="5">
     <test name="MyTest">
         <classes>
-            <class name="test.java.tests.LoggerTest"/>
+            <class name="test.java.tests.ui.testNG.AddFilterTest"/>
         </classes>
     </test>
 </suite>
