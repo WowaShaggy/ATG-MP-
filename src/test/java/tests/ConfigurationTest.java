@@ -11,7 +11,6 @@ public class ConfigurationTest extends TestNGBaseTest {
         String username = Configuration.getProperty("username");
         String password = Configuration.getProperty("password");
 
-        // Используйте параметры конфигурации в вашем тесте
         System.out.println("URL: " + url);
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);

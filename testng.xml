@@ -1,8 +1,24 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="MyTestSuite" thread-count="5">
+<suite name="Test Suites" parallel="tests">
     <test name="MyTest">
         <classes>
             <class name="test.java.tests.ui.testNG.AddFilterTest"/>
         </classes>
+    </test>
+
+    <test name="Thread 1">
+        <groups>
+            <run>
+                <include name="tag1"/>
+            </run>
+        </groups>
+    </test>
+
+    <test name="Thread 2">
+        <groups>
+            <run>
+                <include name="tag2"/>
+            </run>
+        </groups>
     </test>
 </suite>
