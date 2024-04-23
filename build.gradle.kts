@@ -19,8 +19,10 @@ dependencies {
     testImplementation ("io.cucumber:cucumber-java:7.1.0")
     testImplementation ("io.cucumber:cucumber-junit:7.1.0")
     testImplementation ("io.cucumber:cucumber-testng:7.1.0")
+    testImplementation ("org.mockito:mockito-core:3.11.2")
     implementation ("org.apache.logging.log4j:log4j-core:2.17.0")
     implementation ("org.apache.logging.log4j:log4j-api:2.17.0")
+
 
 }
 

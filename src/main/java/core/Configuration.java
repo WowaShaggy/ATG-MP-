@@ -14,7 +14,6 @@ public class Configuration {
             properties.load(new FileInputStream("config.properties"));
         } catch (IOException e) {
             e.printStackTrace();
-            // Обработайте ошибку чтения файла конфигурации
         }
     }
 

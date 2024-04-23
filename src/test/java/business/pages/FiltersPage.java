@@ -1,4 +1,4 @@
-package business;
+package business.pages;
 
 import org.openqa.selenium.WebDriver;
 
