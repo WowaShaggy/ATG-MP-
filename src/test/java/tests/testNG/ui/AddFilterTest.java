@@ -1,9 +1,7 @@
-package tests.ui.testNG;
+package tests.testNG.ui;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import tests.ui.TestDataUtility;
-import tests.ui.TestNGBaseTest;
 
 public class AddFilterTest extends TestNGBaseTest {
 

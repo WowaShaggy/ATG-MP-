@@ -1,8 +1,8 @@
-package tests.ui.junit;
+package tests.junit;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import tests.ui.JunitBaseTest;
+import tests.junit.JunitBaseTest;
 
 public class AddFilterTest extends JunitBaseTest {
 

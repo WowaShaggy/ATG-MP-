@@ -2,9 +2,21 @@
 <suite name="Test Suites" parallel="tests">
     <test name="MyTest">
         <classes>
-            <class name="test.java.tests.ui.testNG.AddFilterTest"/>
+            <class name="test.java.tests.testNG.ui.AddFilterTest"/>
         </classes>
     </test>
+    <test name="Module4 API Tests">
+        <classes>
+            <class name="test.java.tests.testNG.api.module4ApiTest" />
+        </classes>
+    </test>
+
+    <listeners>
+        <listener class-name="org.testng.reporters.EmailableReporter" />
+        <listener class-name="org.testng.reporters.FailedReporter" />
+        <listener class-name="org.testng.reporters.JUnitXMLReporter" />
+        <listener class-name="org.testng.reporters.XMLReporter" />
+    </listeners>
 
     <test name="Thread 1">
         <groups>

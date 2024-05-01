@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
-import tests.ui.TestNGBaseTest;
+import tests.testNG.ui.TestNGBaseTest;
 
 public class LoggerTest extends TestNGBaseTest {
 

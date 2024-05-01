@@ -1,4 +1,4 @@
-package tests.ui;
+package tests.testNG.ui;
 
 import java.util.ArrayList;
 import java.util.List;

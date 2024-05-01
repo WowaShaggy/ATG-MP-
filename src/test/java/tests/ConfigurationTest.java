@@ -2,7 +2,7 @@ package tests;
 
 import core.Configuration;
 import org.testng.annotations.Test;
-import tests.ui.TestNGBaseTest;
+import tests.testNG.ui.TestNGBaseTest;
 
 public class ConfigurationTest extends TestNGBaseTest {
     @Test
