@@ -22,7 +22,7 @@ public class StepDefinitions {
     private String createFilterRQ;
     private String accessToken = "Uladzimir-Papeka_tJsTdWqdRluJdZ9vYlK8vY9_GXpTWb3jjD-7ycdeVg4gzspOFqj8a7Fwi__U5B2k";
 
-    @ParameterType(".*") // Параметр будет преобразован в строку
+    @ParameterType(".*")
     public String projectName(String projectName) {
         return projectName;
     }
