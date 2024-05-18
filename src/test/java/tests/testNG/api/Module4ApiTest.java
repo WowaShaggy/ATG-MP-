@@ -55,7 +55,6 @@ public class Module4ApiTest {
     @DataProvider(name = "filterData")
     public Object[][] filterData() {
         CreateFilterRQ createFilterRQ = new CreateFilterRQ();
-        createFilterRQ.setDescription("description");
         createFilterRQ.setName("name");
         createFilterRQ.setType("launch");
         createFilterRQ.getConditions().add(new Condition("string", "string", "string"));

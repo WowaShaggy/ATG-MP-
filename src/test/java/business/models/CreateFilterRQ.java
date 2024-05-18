@@ -5,16 +5,17 @@ import java.util.List;
 
 public class CreateFilterRQ {
     private List<Condition> conditions;
-    private String description;
+    private int id;
+    private String owner;
     private String name;
     private List<Order> orders;
     private String type;
+
 
     public CreateFilterRQ() {
         this.conditions = new ArrayList<>();
         this.orders = new ArrayList<>();
     }
-
 
     public List<Condition> getConditions() {
         return conditions;
@@ -22,14 +23,6 @@ public class CreateFilterRQ {
 
     public void setConditions(List<Condition> conditions) {
         this.conditions = conditions;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getName() {
@@ -54,5 +47,21 @@ public class CreateFilterRQ {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

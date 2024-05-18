@@ -1,6 +1,9 @@
 package business.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Order {
+    @JsonProperty("isAsc")
     private boolean isAsc;
     private String sortingColumn;
 
@@ -8,7 +11,7 @@ public class Order {
         this.isAsc = isAsc;
         this.sortingColumn = sortingColumn;
     }
-
+    public Order() {}
 
     public boolean isAsc() {
         return isAsc;

@@ -32,7 +32,6 @@ public class Module4ApiPostTest {
     @Parameterized.Parameters(name = "{index}: ProjectName={0}, CreateFilterRQ={1}")
     public static Collection<Object[]> data() {
         CreateFilterRQ createFilterRQ = new CreateFilterRQ();
-        createFilterRQ.setDescription("description123");
         createFilterRQ.setName("name123");
         createFilterRQ.setType("launch123");
         createFilterRQ.getConditions().add(new Condition("string123", "string123", "string123"));
