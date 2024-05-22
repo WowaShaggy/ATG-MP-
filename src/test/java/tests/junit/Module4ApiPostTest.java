@@ -2,7 +2,7 @@ package tests.junit;
 
 
 import business.models.Condition;
-import business.models.CreateFilterRQ;
+import business.models.UserFilterResource;
 import business.models.Order;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -22,24 +22,24 @@ public class Module4ApiPostTest {
     String accessToken = "Uladzimir-Papeka_tJsTdWqdRluJdZ9vYlK8vY9_GXpTWb3jjD-7ycdeVg4gzspOFqj8a7Fwi__U5B2k";
 
     private String projectName;
-    private CreateFilterRQ createFilterRQ;
+    private UserFilterResource userFilterResource;
 
-    public Module4ApiPostTest(String projectName, CreateFilterRQ createFilterRQ) {
+    public Module4ApiPostTest(String projectName, UserFilterResource userFilterResource) {
         this.projectName = projectName;
-        this.createFilterRQ = createFilterRQ;
+        this.userFilterResource = userFilterResource;
     }
 
     @Parameterized.Parameters(name = "{index}: ProjectName={0}, CreateFilterRQ={1}")
     public static Collection<Object[]> data() {
-        CreateFilterRQ createFilterRQ = new CreateFilterRQ();
-        createFilterRQ.setName("name123");
-        createFilterRQ.setType("launch123");
-        createFilterRQ.getConditions().add(new Condition("string123", "string123", "string123"));
-        createFilterRQ.getOrders().add(new Order(true, "string123"));
+        UserFilterResource userFilterResource = new UserFilterResource();
+        userFilterResource.setName("name123");
+        userFilterResource.setType("launch123");
+        userFilterResource.getConditions().add(new Condition("string123", "string123", "string123"));
+        userFilterResource.getOrders().add(new Order(true, "string123"));
 
         return Arrays.asList(new Object[][] {
-                {"default_personal", createFilterRQ},
-                {"12", createFilterRQ}
+                {"default_personal", userFilterResource},
+                {"12", userFilterResource}
         });
     }
 
@@ -49,7 +49,7 @@ public class Module4ApiPostTest {
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + accessToken)
                 .pathParam("projectName", projectName)
-                .body(createFilterRQ)
+                .body(userFilterResource)
                 .when()
                 .post("http://localhost:8080/api/v1/{projectName}/filter");
 

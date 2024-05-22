@@ -1,15 +1,21 @@
 package tests.junit.api;
 
-import business.models.Content;
+import business.ConfigUtil;
+import business.models.*;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import jdk.jfr.Description;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Module7Test {
-    private final String accessToken = "wowatest1_PqhGRBVoR32rUFr_YMsiFY0hxOKKe5_y6VMzacA7bV17dJEQPNRU5yWxD6Xnc0XG";
+    private final String accessToken = ConfigUtil.getProperty("accessToken");
+    private final String baseUrl = ConfigUtil.getProperty("baseUrl");
 
     @Test
     public void testGetProjectFilter() {
@@ -18,7 +24,7 @@ public class Module7Test {
                 .header("Authorization", "Bearer " + accessToken)
                 .pathParam("projectName", projectName)
                 .when()
-                .get("http://localhost:8080/api/v1/{projectName}/filter");
+                .get(baseUrl + "/api/v1/{projectName}/filter");
 
         assertEquals(200, response.getStatusCode());
 
@@ -33,9 +39,163 @@ public class Module7Test {
                 .header("Authorization", "Bearer " + accessToken)
                 .pathParam("projectName", projectName)
                 .when()
-                .get("http://localhost:8080/api/v1/{projectName}/filter");
+                .get(baseUrl + "/api/v1/{projectName}/filter");
 
         assertEquals(404, response.getStatusCode());
 
     }
+
+    @Test
+    public void testPostFilter() {
+        String projectName = "superadmin_personal";
+        String name = UUID.randomUUID().toString().substring(0, 10);
+
+        // Create request body
+        CreateFilterRQ createFilterRQ = new CreateFilterRQ();
+        createFilterRQ.setDescription("description test");
+        createFilterRQ.setName(name);
+        createFilterRQ.setType("launch");
+        createFilterRQ.getConditions().add(new Condition("has", "compositeAttribute", "demo"));
+        createFilterRQ.getOrders().add(new Order(true, "id"));
+
+        // Execute API call
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .body(createFilterRQ)
+                .when()
+                .post(baseUrl + "/api/v1/{projectName}/filter");
+
+        // Verify response
+        assertEquals(201, response.getStatusCode());
+
+        // Deserialize response body
+        EntryCreatedRS createFilterResponse = response.getBody().as(EntryCreatedRS.class);
+        Assertions.assertNotNull(createFilterResponse);
+        Assertions.assertNotNull(createFilterResponse.getId());
+    }
+
+    @Test
+    @Description("invalid body")
+    public void testPostNegative() {
+        String projectName = "superadmin_personal";
+        String name = UUID.randomUUID().toString().substring(0, 10);
+
+        // Create request body
+        CreateFilterRQ createFilterRQ = new CreateFilterRQ();
+        createFilterRQ.setDescription("description test");
+        createFilterRQ.setName(name);
+        createFilterRQ.setType("launch");
+        createFilterRQ.getConditions().add(new Condition("has", "compositeAttribute", "demo"));
+
+        // Execute API call
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .body(createFilterRQ)
+                .when()
+                .post(baseUrl + "/api/v1/{projectName}/filter");
+
+        // Verify response
+        assertEquals(400, response.getStatusCode());
+
+    }
+
+    @Test
+    public void testPutFilter() {
+        String projectName = "superadmin_personal";
+
+        // Step 1: Perform GET request
+        Response getResponse = given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .when()
+                .get(baseUrl + "/api/v1/{projectName}/filter");
+
+        assertEquals(200, getResponse.getStatusCode());
+
+        Content content = getResponse.getBody().as(Content.class);
+        UserFilterResource firstFilter = content.getContent().stream().findFirst().orElseThrow(() ->
+                new RuntimeException("No filters found"));
+
+        // Step 2: Modify the first filter's description
+        String newDescription = "New description";
+        UpdateUserFilterRQ updateUserFilterRQ = new UpdateUserFilterRQ();
+        updateUserFilterRQ.setConditions(firstFilter.getConditions());
+        updateUserFilterRQ.setDescription(newDescription);
+        updateUserFilterRQ.setName(firstFilter.getName());
+        updateUserFilterRQ.setOrders(firstFilter.getOrders());
+        updateUserFilterRQ.setType(firstFilter.getType());
+
+        // Step 3: Perform PUT request with modified body
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .pathParam("filterId", firstFilter.getId())
+                .contentType("application/json")
+                .body(updateUserFilterRQ)
+                .when()
+                .put(baseUrl + "/api/v1/{projectName}/filter/{filterId}")
+                .then()
+                .statusCode(200);
+
+        // Step 4: Perform GET request again to verify the change
+        Response getResponseAfterPut = given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .when()
+                .get(baseUrl + "/api/v1/{projectName}/filter");
+
+        assertEquals(200, getResponseAfterPut.getStatusCode());
+
+        Content contentAfterPut = getResponseAfterPut.getBody().as(Content.class);
+        Assertions.assertTrue(contentAfterPut.getContent().stream()
+                        .anyMatch(filter -> filter.getId() ==
+                                (firstFilter.getId()) && filter.getDescription().equals(newDescription)),
+                "The filter description was not updated correctly");
+    }
+
+    @Test
+    @Description("id is 0")
+    public void testPutFilterNegative() {
+        String projectName = "superadmin_personal";
+
+        // Step 1: Perform GET request
+        Response getResponse = given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .when()
+                .get(baseUrl + "/api/v1/{projectName}/filter");
+
+        assertEquals(200, getResponse.getStatusCode());
+
+        Content content = getResponse.getBody().as(Content.class);
+        UserFilterResource firstFilter = content.getContent().stream().findFirst().orElseThrow(() ->
+                new RuntimeException("No filters found"));
+
+        // Step 2: Modify the first filter's description
+        String newDescription = "New description";
+        UpdateUserFilterRQ updateUserFilterRQ = new UpdateUserFilterRQ();
+        updateUserFilterRQ.setConditions(firstFilter.getConditions());
+        updateUserFilterRQ.setDescription(newDescription);
+        updateUserFilterRQ.setName(firstFilter.getName());
+        updateUserFilterRQ.setOrders(firstFilter.getOrders());
+        updateUserFilterRQ.setType(firstFilter.getType());
+
+        // Step 3: Perform PUT request with modified body
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .pathParam("filterId", 0)
+                .contentType("application/json")
+                .body(updateUserFilterRQ)
+                .when()
+                .put(baseUrl + "/api/v1/{projectName}/filter/{filterId}")
+                .then()
+                .statusCode(404);
+
+    }
 }
+

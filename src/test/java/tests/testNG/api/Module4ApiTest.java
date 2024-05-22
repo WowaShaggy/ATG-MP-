@@ -1,7 +1,7 @@
 package tests.testNG.api;
 
 import business.models.Condition;
-import business.models.CreateFilterRQ;
+import business.models.UserFilterResource;
 import business.models.Order;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -28,12 +28,12 @@ public class Module4ApiTest {
     }
 
     @Test(dataProvider = "filterData")
-    public void testPostFilter(String projectName, CreateFilterRQ createFilterRQ) {
+    public void testPostFilter(String projectName, UserFilterResource userFilterResource) {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + accessToken)
                 .pathParam("projectName", projectName)
-                .body(createFilterRQ)
+                .body(userFilterResource)
                 .when()
                 .post("http://localhost:8080/api/v1/{projectName}/filter");
 
@@ -54,15 +54,15 @@ public class Module4ApiTest {
 
     @DataProvider(name = "filterData")
     public Object[][] filterData() {
-        CreateFilterRQ createFilterRQ = new CreateFilterRQ();
-        createFilterRQ.setName("name");
-        createFilterRQ.setType("launch");
-        createFilterRQ.getConditions().add(new Condition("string", "string", "string"));
-        createFilterRQ.getOrders().add(new Order(true, "string"));
+        UserFilterResource userFilterResource = new UserFilterResource();
+        userFilterResource.setName("name");
+        userFilterResource.setType("launch");
+        userFilterResource.getConditions().add(new Condition("string", "string", "string"));
+        userFilterResource.getOrders().add(new Order(true, "string"));
 
         return new Object[][] {
-                {"default_personal", createFilterRQ},
-                {"12", createFilterRQ},
+                {"default_personal", userFilterResource},
+                {"12", userFilterResource},
         };
     }
 }
