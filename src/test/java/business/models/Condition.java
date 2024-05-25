@@ -5,6 +5,7 @@ public class Condition {
     private String filteringField;
     private String value;
 
+    public Condition() {}
     public Condition(String condition, String filteringField, String value) {
         this.condition = condition;
         this.filteringField = filteringField;

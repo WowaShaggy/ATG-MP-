@@ -3,15 +3,17 @@ package business.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateFilterRQ {
+public class UserFilterResource {
     private List<Condition> conditions;
-    private String description;
+    private int id;
+    private String owner;
     private String name;
     private List<Order> orders;
     private String type;
+    private String description;
 
 
-    public CreateFilterRQ() {
+    public UserFilterResource() {
         this.conditions = new ArrayList<>();
         this.orders = new ArrayList<>();
     }
@@ -46,6 +48,22 @@ public class CreateFilterRQ {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getDescription() {

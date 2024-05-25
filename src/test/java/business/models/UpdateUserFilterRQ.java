@@ -3,15 +3,18 @@ package business.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateFilterRQ {
+public class UpdateUserFilterRQ {
+
     private List<Condition> conditions;
+
     private String description;
+
     private String name;
     private List<Order> orders;
     private String type;
 
 
-    public CreateFilterRQ() {
+    public UpdateUserFilterRQ() {
         this.conditions = new ArrayList<>();
         this.orders = new ArrayList<>();
     }
@@ -55,4 +58,5 @@ public class CreateFilterRQ {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

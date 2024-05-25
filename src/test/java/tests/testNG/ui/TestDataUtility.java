@@ -9,7 +9,6 @@ public class TestDataUtility {
     public static List<Object[]> getTestData() {
         List<Object[]> testData = new ArrayList<>();
 
-        // Добавление данных в список
         testData.add(new Object[]{"testData1"});
         testData.add(new Object[]{"testData2"});
         testData.add(new Object[]{"testData3"});
