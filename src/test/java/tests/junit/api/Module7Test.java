@@ -5,6 +5,7 @@ import business.models.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import jdk.jfr.Description;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -195,6 +196,77 @@ public class Module7Test {
                 .put(baseUrl + "/api/v1/{projectName}/filter/{filterId}")
                 .then()
                 .statusCode(404);
+
+    }
+
+    // NO PATCH API FOR FILTERS, WHY IT IS REQUIRED IN HOMETASK THEN
+
+    @Test
+    public void testCreateAndDeleteFilter() {
+        String projectName = "superadmin_personal";
+        String name = UUID.randomUUID().toString().substring(0, 10);
+
+        // Create request body
+        CreateFilterRQ createFilterRQ = new CreateFilterRQ();
+        createFilterRQ.setDescription("description test");
+        createFilterRQ.setName(name);
+        createFilterRQ.setType("launch");
+        createFilterRQ.getConditions().add(new Condition("has", "compositeAttribute", "demo"));
+        createFilterRQ.getOrders().add(new Order(true, "id"));
+
+        // Execute API call to create filter
+        Response createResponse = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .body(createFilterRQ)
+                .when()
+                .post(baseUrl + "/api/v1/{projectName}/filter");
+
+        // Verify response status code
+        assertEquals(201, createResponse.getStatusCode());
+
+        // Deserialize response body
+        EntryCreatedRS createFilterResponse = createResponse.getBody().as(EntryCreatedRS.class);
+        Assertions.assertNotNull(createFilterResponse);
+        Assertions.assertNotNull(createFilterResponse.getId());
+
+        // Perform DELETE operation
+        int filterId = createFilterResponse.getId();
+        Response deleteResponse = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .pathParam("filterId", filterId)
+                .when()
+                .delete(baseUrl + "/api/v1/{projectName}/filter/{filterId}");
+
+        // Verify response status code
+        assertEquals(200, deleteResponse.getStatusCode());
+
+        // Verify response body
+        OperationCompletionRS messageResponse = deleteResponse.getBody().as(OperationCompletionRS.class);
+        Assertions.assertNotNull(messageResponse);
+        Assertions.assertTrue(messageResponse.getMessage().contains("successfully deleted"));
+    }
+
+    @Test
+    public void testDeleteFilterNegative() {
+
+        String projectName = "superadmin_personal";
+
+        // Perform DELETE operation
+        int filterId = RandomUtils.nextInt() + 1000;
+        Response deleteResponse = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("projectName", projectName)
+                .pathParam("filterId", filterId)
+                .when()
+                .delete(baseUrl + "/api/v1/{projectName}/filter/{filterId}");
+
+        // Verify response status code
+        assertEquals(404, deleteResponse.getStatusCode());
 
     }
 }
