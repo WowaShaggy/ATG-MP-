@@ -1,0 +1,17 @@
+version: "1.0"
+
+steps:
+  - name: Build and Test
+    commands:
+      - ./gradlew clean build
+
+branches:
+  only:
+    - main
+    - module9
+
+triggers:
+  - branch: main
+    schedule: "0 0 * * *" # Run daily at midnight
+  - branch: develop
+    event: module9
